@@ -9,14 +9,7 @@ import sys
 
 def parse_args():
     """
-        Required args
-        - vcenter ip
-        - vcenter password
-        - vcenter user
-        - vm name
-        - aws profile (pre-configured)
-        - aws_regions
-        - AMI sav ename
+    Argument Parser and Validator
     """
     parser = argparse.ArgumentParser(description="Converts, and downloads a vm by name from vCenter to OVF in specified"
                                                  " directory, then uploads the image as an AMI. AMI will be uploaded "
@@ -39,11 +32,15 @@ def parse_args():
                                                                            'Defaults to the name of the file')
     args = parser.parse_args()
 
-
     return args
 
 
 def validate_args(args):
+    """
+    Call all required validation methods
+    :param args:
+    :return:
+    """
     if not os.path.isdir(args.directory):
         print "Directory {} does not exist".format(args.directory)
         sys.exit(5)
@@ -54,6 +51,12 @@ def validate_args(args):
 
 
 def vm2ami(args):
+    """
+    Download VMDKs from vCenter, and upload them to AWS s3 bucket, convert the file into an AMI. Then rename the AMI,
+    and copy it to all other required regions
+    :param args:
+    :return:
+    """
     exporter = OvfExporter(user=args.vcenter_user,password=args.vcenter_pass, host=args.vcenter_host, port=args.vcenter_port,
                            vm_name=args.vm_name, dir=args.directory)
     vmdk_file = exporter.export_ovf()
