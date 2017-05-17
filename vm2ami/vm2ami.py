@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import argparse
-import AWSUtilities
-from OvfExporter import OvfExporter
+from amiimporter import amiupload
+from amiuploader import amiupload
+from ovfexporter import ovfexport
 import tempfile
 import os
 import sys
@@ -35,37 +36,12 @@ def parse_args():
     return args
 
 
-def validate_args(args):
-    """
-    Call all required validation methods
-    :param args:
-    :return:
-    """
-    if not os.path.isdir(args.directory):
-        print "Directory {} does not exist".format(args.directory)
-        sys.exit(5)
-
-    aws_importer = AWSUtilities.AWSUtils(args.directory, args.aws_profile, args.s3_bucket,
-                                         args.aws_regions, args.ami_name, None)
-    aws_importer.validate()
-
-
-def vm2ami(args):
-    """
-    Download VMDKs from vCenter, and upload them to AWS s3 bucket, convert the file into an AMI. Then rename the AMI,
-    and copy it to all other required regions
-    :param args:
-    :return:
-    """
-    exporter = OvfExporter(user=args.vcenter_user,password=args.vcenter_pass, host=args.vcenter_host, port=args.vcenter_port,
-                           vm_name=args.vm_name, dir=args.directory)
-    vmdk_file = exporter.export_ovf()
-
-    aws_importer = AWSUtilities.AWSUtils(args.directory, args.aws_profile, args.s3_bucket,
-                                         args.aws_regions, args.ami_name, vmdk_file)
-    aws_importer.import_vmdk()
-
-
-if __name__ == "__main__":
+def main():
     args = parse_args()
-    vm2ami(args)
+    ovfexport.validate_args(args)
+    amiupload.validate_args(args)
+    downloaded_vmdk = ovfexport.convert(args)
+
+    args.vmdk_upload_file = downloaded_vmdk
+    amiupload.vmdk_to_ami(args)
+
