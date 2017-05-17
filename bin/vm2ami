@@ -1,2 +1,3 @@
+#!/usr/bin/env python
 from vm2ami import vm2ami
 vm2ami.main()

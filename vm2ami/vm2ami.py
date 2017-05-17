@@ -1,11 +1,9 @@
 #!/usr/bin/python
 import argparse
 from amiimporter import amiupload
-from amiuploader import amiupload
+from amiimporter import AWSUtilities
 from ovfexporter import ovfexport
 import tempfile
-import os
-import sys
 
 
 def parse_args():
@@ -27,8 +25,8 @@ def parse_args():
                         help='Directory to save the vmdk temp file (defaults to temp location')
     parser.add_argument('-w', '--vcenter_port', type=str, default='443',
                         help='Port to use for communication to vcenter api. Default is 443')
-    parser.add_argument('-b', '--aws_bucket', type=str, required=True,
-                        help='The aws_bucket of the profile to upload and save vmdk to')
+    parser.add_argument('-b', '--s3_bucket', type=str, required=True,
+                        help='The s3 of the profile to upload and save vmdk to')
     parser.add_argument('-m', '--ami_name', type=str, required=False, help='The name to give to the uploaded ami. '
                                                                            'Defaults to the name of the file')
     args = parser.parse_args()
