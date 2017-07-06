@@ -29,9 +29,7 @@ $ pip install vm2ami
 
 
 ## Running
-    All arguments and parameters are specified in the help menu when running the script
-    Example Run:
+All arguments and parameters are specified in the help menu when running the script
 
-    ```
+
     $ vm2ami -h
-    ```
