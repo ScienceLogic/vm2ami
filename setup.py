@@ -10,7 +10,7 @@ setup(name='vm2ami',
       author_email='drohde@sciencelogic.com',
       packages=['vm2ami'],
       keywords='export vmdk vCenter vm ami upload ',
-      url='todo',
+      url='https://github.com/ScienceLogic/vm2ami/archive/1.0.0.zip',
       license="MIT",
       install_requires=[
           'ovfexporter',
